@@ -9,6 +9,7 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 
+
 app.get('/', (req, res) =>{
     res.send('Coffee Store is Running......')
 })
@@ -27,6 +28,7 @@ const client = new MongoClient(uri, {
     }
 });
 
+
 async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
@@ -34,13 +36,22 @@ async function run() {
 
         const coffeeCollection = client.db('coffeeDB').collection('coffee');
 
+        // add new post / new coffee 
         app.post('/coffee', async(req, res) => {
             const newCoffee = req.body;
             // console.log(newCoffee);
-
             const result = await coffeeCollection.insertOne(newCoffee);
             res.send(result);
-        })
+        });
+
+        // coffee data get 
+        app.get('/coffee', async(req, res) => {
+            const cursor = coffeeCollection.find();
+            const result = await cursor.toArray();
+            res.send(result);
+        });
+
+
 
 
         // Send a ping to confirm a successful connection
