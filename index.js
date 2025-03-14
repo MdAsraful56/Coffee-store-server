@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -51,6 +51,13 @@ async function run() {
             res.send(result);
         });
 
+        // delete coffee 
+        app.delete('/coffee/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = { _id: new ObjectId(id) }
+            const result = await coffeeCollection.deleteOne(query);
+            res.send(result);
+        })
 
 
 
@@ -67,5 +74,5 @@ run().catch(console.dir);
 
 
 app.listen(port, ()=>{
-    console.log(`Server is Running : ${port}`)
+    console.log(`Server is Running on  http://localhost:${port}`)
 })
