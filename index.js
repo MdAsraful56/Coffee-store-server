@@ -59,11 +59,40 @@ async function run() {
             res.send(result);
         })
 
-        //update a coffee
+        //daynamik id a coffee
         app.get('/updatecoffee/:id', async(req, res) => {
             const id = req.params.id;
             const query = {_id: new ObjectId(id)}
             const result = await coffeeCollection.findOne(query)
+            res.send(result);
+        })
+
+        //daynamik id a coffee
+        app.get('/details/:id', async(req, res) => {
+            const id = req.params.id;
+            const query = {_id: new ObjectId(id)}
+            const result = await coffeeCollection.findOne(query)
+            res.send(result);
+        })
+
+        // update a daynamik id coffee 
+        app.put('/coffee/:id', async(req, res) => {
+            const id = req.params.id;
+            const filter = {_id: new ObjectId(id)}
+            const options = { upsert: true }
+            const updatedcoffee = req.body;
+            const coffee = {
+                $set: {
+                    name: updatedcoffee.name,
+                    chef: updatedcoffee.chef,
+                    supplier: updatedcoffee.supplier,
+                    taste: updatedcoffee.taste,
+                    category: updatedcoffee.category,
+                    details: updatedcoffee.details,
+                    photo: updatedcoffee.photo
+                }
+            }
+            const result = await  coffeeCollection.updateOne(filter, coffee,options);
             res.send(result);
         })
 
