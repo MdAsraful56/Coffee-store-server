@@ -35,7 +35,7 @@ async function run() {
         await client.connect();
 
         const coffeeCollection = client.db('coffeeDB').collection('coffee');
-
+        const userCollection = client.db('coffeeDB').collection('users')
         // add new post / new coffee 
         app.post('/coffee', async(req, res) => {
             const newCoffee = req.body;
@@ -93,6 +93,15 @@ async function run() {
                 }
             }
             const result = await  coffeeCollection.updateOne(filter, coffee,options);
+            res.send(result);
+        })
+
+
+        // users related api 
+        app.post('/users', async(req, res) => {
+            const newUser = req.body;
+            console.log('creating new user', newUser);
+            const result = await userCollection.insertOne(newUser);
             res.send(result);
         })
 
